@@ -1,0 +1,42 @@
+#for anonymous ldap , smb , ftp logins
+
+read "Domain First Name : " fd
+read "Domain second Name : " sd
+read "IP : " ip
+domain="$fd.$sd"
+
+#for ldap 
+echo "ldapsearch :"
+ldapsearch -x -H ldap://$ip -b "DC=$fd,DC=$sd"
+
+ldapsearch -H ldap://$ip:389/ -x -b "" -W "objectclass=*"
+
+ldapsearch -x -H ldap://$ip -b "DC=$fd,DC=$sd" -D '$domain' 'objectClass=user' | grep "sAMAccountName:" | cut -d' ' -f2 | tee loots/users.txt
+
+ldapsearch -x -H ldap://$ip -b "DC=$fd,DC=$sd" -D '$domain' 'objectClass=user' | grep "description:"
+echo
+
+#for smb
+echo "smbclient : "
+smbclient -L //$ip/ -N
+echo
+echo "smbmap : "
+smbmap -H $ip
+echo
+echo "nxc for SMB :"
+nxc smb $ip -u '' -p ''
+
+nxc smb $ip -u '' -p '' --shares
+
+nxc smb $ip -u '' -p '' --pass-pol
+
+nxc smb $ip -u '' -p '' --users
+
+nxc smb $il -u '' -p '' --groups
+echo
+echo
+
+#ftp
+echo "nxc for FTP"
+nxc ftp $ip -u '' -p ''
+echo
