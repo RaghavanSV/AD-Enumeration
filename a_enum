@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #for anonymous ldap , smb , ftp logins
 
 read "Domain First Name : " fd

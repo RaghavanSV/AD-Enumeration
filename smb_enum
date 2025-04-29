@@ -1,3 +1,5 @@
+#!/bin/bash
+
 read "IP : " ip
 read "Username : " user
 read "Password : " pass
