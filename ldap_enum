@@ -1,0 +1,18 @@
+#!/bin/bash
+
+read "First Domain : " fd
+read "second Domain : " sd
+read "Username : " user
+read "Password : " pass
+read "IP : " ip
+domain=$fd.$sd
+echo "ldapsearch : "
+echo
+ldapsearch -x -H ldap://$ip -b "DC=$fd,DC=$sd" -D "$user@$domain" -w "$pass"
+echo
+ldapsearch -H ldap://$ip:389/ -x -b "DC=$fd,DC=$sd" -D "$user@$domain" -w "$pass" "objectclass=*"
+echo
+ldapsearch -x -H ldap://$ip -b "DC=$fd,DC=$sd" -D "$user@$domain" -w "$pass" 'objectClass=user' | grep "sAMAccountName:" | cut -d' ' -f2 | tee loots/users.txt
+echo
+ldapsearch -x -H ldap://$ip -b "DC=$fd,DC=$sd" -D "$user@$domain" -w "$pass" 'objectClass=user' | grep "description:"
+echo
