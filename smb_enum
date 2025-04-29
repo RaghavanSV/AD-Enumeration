@@ -1,0 +1,20 @@
+read "IP : " ip
+read "Username : " user
+read "Password : " pass
+
+echo "smbclient : "
+smbclient -L //$ip/ -U $user $pass
+echo
+
+echo "smbmap : "
+smbmap -H $ip -u $user -p $pass
+echo
+
+echo "ncx : "
+nxc smb $ip -u $user $pass --shares
+echo
+nxc smb $ip -u $user $pass --pass-pol
+echo
+nxc smb $ip -u $user $pass --users
+echo
+nxc smb $ip -u $user $pass -M spider_plus
